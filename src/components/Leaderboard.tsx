@@ -1,8 +1,12 @@
+import type {
+    LeaderboardEntry,
+} from '../utils/leaderboard';
+
 interface LeaderboardProps {
-    scores: number[];
+    entries: LeaderboardEntry[];
 }
 
-function getMedal(position: number) {
+function getMedal(position: number): string {
     if (position === 0) {
         return '🥇';
     }
@@ -19,14 +23,17 @@ function getMedal(position: number) {
 }
 
 export function Leaderboard({
-                                scores,
+                                entries,
                             }: LeaderboardProps) {
-    const bestScore = scores.at(0);
+    const bestEntry = entries.at(0);
 
     return (
         <section className="game__leaderboard">
             <div className="game__leaderboard-header">
-                <div className="game__leaderboard-icon" aria-hidden="true">
+                <div
+                    className="game__leaderboard-icon"
+                    aria-hidden="true"
+                >
                     🏆
                 </div>
 
@@ -39,45 +46,44 @@ export function Leaderboard({
                 </div>
             </div>
 
-            {bestScore !== undefined && (
+            {bestEntry && (
                 <div className="game__record">
-                    <span>Récord actual</span>
-                    <strong>{bestScore}</strong>
-                    <small>puntos</small>
+                    <div>
+                        <span>Récord actual</span>
+                        <small>{bestEntry.name}</small>
+                    </div>
+
+                    <strong>{bestEntry.score}</strong>
                 </div>
             )}
 
-            {scores.length === 0 ? (
+            {entries.length === 0 ? (
                 <div className="game__leaderboard-empty">
                     <span aria-hidden="true">👑</span>
 
                     <p>Todavía no hay campeones.</p>
 
                     <small>
-                        Terminá una partida para registrar tu primer puntaje.
+                        Terminá una partida para registrar el primer puntaje.
                     </small>
                 </div>
             ) : (
                 <ol className="game__leaderboard-list">
-                    {scores.map((score, index) => (
+                    {entries.map((entry, index) => (
                         <li
                             className={`game__leaderboard-item ${
                                 index < 3
                                     ? `game__leaderboard-item--top-${index + 1}`
                                     : ''
                             }`}
-                            key={`${score}-${index}`}
+                            key={`${entry.name}-${entry.score}-${index}`}
                         >
               <span className="game__leaderboard-position">
                 {getMedal(index)}
               </span>
 
                             <div className="game__leaderboard-player">
-                <span>
-                  {index === 0
-                      ? 'Campeón'
-                      : `Posicion ${index + 1}`}
-                </span>
+                                <span>{entry.name}</span>
 
                                 <small>
                                     {index === 0
@@ -86,7 +92,7 @@ export function Leaderboard({
                                 </small>
                             </div>
 
-                            <strong>{score}</strong>
+                            <strong>{entry.score}</strong>
                         </li>
                     ))}
                 </ol>

@@ -15,6 +15,9 @@ import { Leaderboard } from './components/Leaderboard';
 import { WordChain } from './components/WordChain';
 import { WordForm } from './components/WordForm';
 import { validateWord } from './services/wordApi';
+import type {
+    LeaderboardEntry,
+} from './utils/leaderboard';
 import {
     getLeaderboard,
     saveScore,
@@ -35,9 +38,9 @@ function App() {
     const [timeLeft, setTimeLeft] = useState(15);
     const [gameStarted, setGameStarted] = useState(false);
     const [gameOver, setGameOver] = useState(false);
-    const [leaderboard, setLeaderboard] = useState<number[]>(
-        getLeaderboard,
-    );
+    const [leaderboard, setLeaderboard] =
+        useState<LeaderboardEntry[]>(getLeaderboard);
+    const [playerName, setPlayerName] = useState('');
 
     const scoreSavedRef = useRef(false);
 
@@ -51,7 +54,9 @@ function App() {
 
             if (!scoreSavedRef.current) {
                 scoreSavedRef.current = true;
-                setLeaderboard(saveScore(score));
+                setLeaderboard(
+                    saveScore(playerName, score),
+                );
             }
 
             return;
@@ -72,6 +77,13 @@ function App() {
         setCurrentWord(event.target.value);
     };
 
+    const handlePlayerNameChange:
+        React.ChangeEventHandler<HTMLInputElement> = (
+        event,
+    ) => {
+        setPlayerName(event.target.value);
+    };
+
     const handleSubmit: FormEventHandler<HTMLFormElement> = async (
         event,
     ) => {
@@ -84,6 +96,13 @@ function App() {
         const word = normalizeWord(currentWord);
 
         setError('');
+
+        const normalizedPlayerName = playerName.trim();
+
+        if (!normalizedPlayerName) {
+            setError('Ingresá tu nombre antes de comenzar.');
+            return;
+        }
 
         if (!word) {
             setError('Ingresá una palabra.');
@@ -178,9 +197,12 @@ function App() {
                         />
                     ) : (
                         <WordForm
+                            playerName={playerName}
                             currentWord={currentWord}
                             error={error}
                             isValidating={isValidating}
+                            gameStarted={gameStarted}
+                            onPlayerNameChange={handlePlayerNameChange}
                             onChange={handleWordChange}
                             onSubmit={handleSubmit}
                         />
@@ -188,7 +210,7 @@ function App() {
                 </section>
 
                 <aside className="game__leaderboard-panel">
-                    <Leaderboard scores={leaderboard} />
+                    <Leaderboard entries={leaderboard} />
                 </aside>
             </div>
         </main>

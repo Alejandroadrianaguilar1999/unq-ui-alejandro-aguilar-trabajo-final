@@ -1,40 +1,93 @@
 const LEADERBOARD_KEY = 'word-chain-leaderboard';
 const MAX_SCORES = 10;
 
-export function getLeaderboard(): number[] {
-    const storedScores = localStorage.getItem(LEADERBOARD_KEY);
+export interface LeaderboardEntry {
+    name: string;
+    score: number;
+}
 
-    if (!storedScores) {
+export function getLeaderboard(): LeaderboardEntry[] {
+    const storedLeaderboard = localStorage.getItem(LEADERBOARD_KEY);
+
+    if (!storedLeaderboard) {
         return [];
     }
 
     try {
-        const parsedScores: unknown = JSON.parse(storedScores);
+        const parsedLeaderboard: unknown =
+            JSON.parse(storedLeaderboard);
 
-        if (!Array.isArray(parsedScores)) {
+        if (!Array.isArray(parsedLeaderboard)) {
             return [];
         }
 
-        return parsedScores.filter(
-            (score): score is number =>
-                typeof score === 'number' && Number.isFinite(score),
-        );
+        return parsedLeaderboard
+            .map((entry): LeaderboardEntry | null => {
+                /*
+                 * Permite recuperar puntajes guardados con la versión anterior,
+                 * cuando el leaderboard almacenaba solamente números.
+                 */
+                if (
+                    typeof entry === 'number' &&
+                    Number.isFinite(entry)
+                ) {
+                    return {
+                        name: 'Jugador',
+                        score: entry,
+                    };
+                }
+
+                if (
+                    typeof entry === 'object' &&
+                    entry !== null &&
+                    'name' in entry &&
+                    'score' in entry &&
+                    typeof entry.name === 'string' &&
+                    typeof entry.score === 'number' &&
+                    Number.isFinite(entry.score)
+                ) {
+                    return {
+                        name: entry.name,
+                        score: entry.score,
+                    };
+                }
+
+                return null;
+            })
+            .filter(
+                (entry): entry is LeaderboardEntry =>
+                    entry !== null,
+            );
     } catch {
         return [];
     }
 }
 
-export function saveScore(score: number): number[] {
-    const currentScores = getLeaderboard();
+export function saveScore(
+    name: string,
+    score: number,
+): LeaderboardEntry[] {
+    const currentLeaderboard = getLeaderboard();
 
-    const updatedScores = [...currentScores, score]
-        .sort((firstScore, secondScore) => secondScore - firstScore)
+    const newEntry: LeaderboardEntry = {
+        name: name.trim(),
+        score,
+    };
+
+    const updatedLeaderboard = [
+        ...currentLeaderboard,
+        newEntry,
+    ]
+        .sort(
+            (firstEntry, secondEntry) =>
+                secondEntry.score - firstEntry.score,
+        )
         .slice(0, MAX_SCORES);
 
     localStorage.setItem(
         LEADERBOARD_KEY,
-        JSON.stringify(updatedScores),
+        JSON.stringify(updatedLeaderboard),
     );
 
-    return updatedScores;
+    return updatedLeaderboard;
 }
