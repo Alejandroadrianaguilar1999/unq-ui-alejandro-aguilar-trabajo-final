@@ -1,12 +1,173 @@
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
+#root {
+  min-height: 100vh;
 }
 
-main {
+.game {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 2rem;
+  background-color: #111827;
 }
 
-h1 {
+.game__card {
+  width: 100%;
+  max-width: 720px;
+  padding: 2rem;
+  border-radius: 1rem;
+  background-color: #ffffff;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.game__header {
   text-align: center;
+}
+
+.game__eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08rem;
+  color: #4f46e5;
+}
+
+.game__header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  color: #111827;
+}
+
+.game__description {
+  max-width: 520px;
+  margin: 1rem auto 0;
+  line-height: 1.6;
+  color: #6b7280;
+}
+
+.game__status {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.game__status-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 1.25rem;
+  border-radius: 0.75rem;
+  background-color: #eef2ff;
+}
+
+.game__status-card span {
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.game__status-card strong {
+  font-size: 2rem;
+  color: #312e81;
+}
+
+.game__chain {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+}
+
+.game__chain h2 {
+  margin: 0 0 1rem;
+  font-size: 1.1rem;
+  color: #111827;
+}
+
+.game__empty-message {
+  margin: 0;
+  color: #9ca3af;
+}
+
+.game__next-word {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  text-align: center;
+  background-color: #f9fafb;
+  color: #374151;
+}
+
+.game__next-word p {
+  margin: 0;
+}
+
+.game__form {
+  margin-top: 2rem;
+}
+
+.game__form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.game__form-controls {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.game__form input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.85rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.65rem;
+  font-size: 1rem;
+}
+
+.game__form input:focus {
+  outline: 2px solid #818cf8;
+  border-color: transparent;
+}
+
+.game__form button {
+  padding: 0.85rem 1.5rem;
+  border: 0;
+  border-radius: 0.65rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  background-color: #4f46e5;
+  cursor: pointer;
+}
+
+.game__form button:hover {
+  background-color: #4338ca;
+}
+
+@media (max-width: 600px) {
+  .game {
+    align-items: flex-start;
+    padding: 1rem;
+  }
+
+  .game__card {
+    padding: 1.25rem;
+  }
+
+  .game__header h1 {
+    font-size: 2rem;
+  }
+
+  .game__form-controls {
+    flex-direction: column;
+  }
+
+  .game__form button {
+    width: 100%;
+  }
 }
