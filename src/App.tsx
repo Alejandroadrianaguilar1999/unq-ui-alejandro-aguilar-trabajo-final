@@ -1,5 +1,9 @@
 import { useState } from 'react';
 import { validateWord } from './services/wordApi';
+import {
+    normalizeWord,
+    respectsChain,
+} from './utils/words';
 import './App.css';
 
 function App() {
@@ -8,6 +12,9 @@ function App() {
     const [score, setScore] = useState(0);
     const [error, setError] = useState('');
     const [isValidating, setIsValidating] = useState(false);
+
+    const lastWord = words.at(-1);
+    const requiredLetter = lastWord?.at(-1);
 
     const handleSubmit = async (
         event: React.FormEvent<HTMLFormElement>,
@@ -18,7 +25,7 @@ function App() {
             return;
         }
 
-        const word = currentWord.trim().toLocaleLowerCase('es');
+        const word = normalizeWord(currentWord);
 
         setError('');
 
@@ -29,6 +36,20 @@ function App() {
 
         if (words.includes(word)) {
             setError('La palabra ya fue utilizada.');
+            return;
+        }
+
+        const previousWord = words.at(-1);
+
+        if (
+            previousWord &&
+            !respectsChain(previousWord, word)
+        ) {
+            setError(
+                `La palabra debe comenzar con la letra "${previousWord
+                    .at(-1)
+                    ?.toUpperCase()}".`,
+            );
             return;
         }
 
@@ -104,7 +125,14 @@ function App() {
                 </section>
 
                 <section className="game__next-word">
-                    <p>Podés comenzar con cualquier palabra.</p>
+                    {requiredLetter ? (
+                        <p>
+                            La siguiente palabra debe comenzar con{' '}
+                            <strong>{requiredLetter.toUpperCase()}</strong>
+                        </p>
+                    ) : (
+                        <p>Podés comenzar con cualquier palabra.</p>
+                    )}
                 </section>
 
                 <form
