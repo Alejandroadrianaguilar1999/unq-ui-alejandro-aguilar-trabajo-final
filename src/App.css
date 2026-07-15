@@ -636,8 +636,16 @@ input {
   }
 
   .game__card {
-    padding: 1.25rem;
-    border-radius: 1.25rem;
+    position: relative;
+    width: 100%;
+    padding: 2rem;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 1.75rem;
+    background-color: rgba(15, 23, 42, 0.88);
+    box-shadow:
+            0 30px 80px rgba(0, 0, 0, 0.45),
+            inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(18px);
   }
 
   .game__status {
@@ -669,5 +677,39 @@ input {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+.game__layout {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1120px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  align-items: start;
+  gap: 1.5rem;
+}
+
+.game__leaderboard-panel {
+  position: sticky;
+  top: 1.5rem;
+  margin-top: 0;
+}
+
+@media (max-width: 920px) {
+  .game__layout {
+    grid-template-columns: 1fr;
+    max-width: 780px;
+  }
+
+  .game__leaderboard-panel {
+    position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .game__layout {
+    gap: 1rem;
   }
 }

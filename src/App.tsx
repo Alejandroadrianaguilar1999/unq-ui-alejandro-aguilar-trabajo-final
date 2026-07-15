@@ -1,18 +1,24 @@
 import {
     useEffect,
+    useRef,
     useState,
 } from 'react';
 import type {
-    ChangeEvent,
-    FormEvent,
+    ChangeEventHandler,
+    FormEventHandler,
 } from 'react';
 
 import { GameHeader } from './components/GameHeader';
 import { GameOver } from './components/GameOver';
 import { GameStatus } from './components/GameStatus';
+import { Leaderboard } from './components/Leaderboard';
 import { WordChain } from './components/WordChain';
 import { WordForm } from './components/WordForm';
 import { validateWord } from './services/wordApi';
+import {
+    getLeaderboard,
+    saveScore,
+} from './utils/leaderboard';
 import {
     normalizeWord,
     respectsChain,
@@ -29,6 +35,11 @@ function App() {
     const [timeLeft, setTimeLeft] = useState(15);
     const [gameStarted, setGameStarted] = useState(false);
     const [gameOver, setGameOver] = useState(false);
+    const [leaderboard, setLeaderboard] = useState<number[]>(
+        getLeaderboard,
+    );
+
+    const scoreSavedRef = useRef(false);
 
     useEffect(() => {
         if (!gameStarted || gameOver) {
@@ -37,6 +48,12 @@ function App() {
 
         if (timeLeft === 0) {
             setGameOver(true);
+
+            if (!scoreSavedRef.current) {
+                scoreSavedRef.current = true;
+                setLeaderboard(saveScore(score));
+            }
+
             return;
         }
 
@@ -47,16 +64,16 @@ function App() {
         return () => {
             window.clearTimeout(timerId);
         };
-    }, [gameStarted, gameOver, timeLeft]);
+    }, [gameStarted, gameOver, timeLeft, score]);
 
-    const handleWordChange = (
-        event: ChangeEvent<HTMLInputElement>,
+    const handleWordChange: ChangeEventHandler<HTMLInputElement> = (
+        event,
     ) => {
         setCurrentWord(event.target.value);
     };
 
-    const handleSubmit = async (
-        event: FormEvent<HTMLFormElement>,
+    const handleSubmit: FormEventHandler<HTMLFormElement> = async (
+        event,
     ) => {
         event.preventDefault();
 
@@ -133,39 +150,47 @@ function App() {
         setTimeLeft(15);
         setGameStarted(false);
         setGameOver(false);
+
+        scoreSavedRef.current = false;
     };
 
     return (
         <main className="game">
-            <section className="game__card">
-                <GameHeader />
+            <div className="game__layout">
+                <section className="game__card">
+                    <GameHeader />
 
-                <GameStatus
-                    score={score}
-                    timeLeft={timeLeft}
-                />
-
-                <WordChain
-                    words={words}
-                    gameOver={gameOver}
-                />
-
-                {gameOver ? (
-                    <GameOver
-                        wordCount={words.length}
+                    <GameStatus
                         score={score}
-                        onRestart={restartGame}
+                        timeLeft={timeLeft}
                     />
-                ) : (
-                    <WordForm
-                        currentWord={currentWord}
-                        error={error}
-                        isValidating={isValidating}
-                        onChange={handleWordChange}
-                        onSubmit={handleSubmit}
+
+                    <WordChain
+                        words={words}
+                        gameOver={gameOver}
                     />
-                )}
-            </section>
+
+                    {gameOver ? (
+                        <GameOver
+                            wordCount={words.length}
+                            score={score}
+                            onRestart={restartGame}
+                        />
+                    ) : (
+                        <WordForm
+                            currentWord={currentWord}
+                            error={error}
+                            isValidating={isValidating}
+                            onChange={handleWordChange}
+                            onSubmit={handleSubmit}
+                        />
+                    )}
+                </section>
+
+                <aside className="game__leaderboard-panel">
+                    <Leaderboard scores={leaderboard} />
+                </aside>
+            </div>
         </main>
     );
 }
