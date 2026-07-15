@@ -171,3 +171,12 @@
     width: 100%;
   }
 }
+
+.game__words {
+  margin: 0;
+  line-height: 1.8;
+  font-size: 1.05rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+  color: #312e81;
+}
