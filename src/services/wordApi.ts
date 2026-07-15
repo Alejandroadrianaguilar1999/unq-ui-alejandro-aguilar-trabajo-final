@@ -4,7 +4,9 @@ interface ValidateWordResponse {
     exists: boolean;
 }
 
-export async function validateWord(word: string): Promise<boolean> {
+export async function validateWord(
+    word: string,
+): Promise<boolean> {
     const response = await fetch(
         `${API_URL}/api/validate?word=${encodeURIComponent(word)}`,
     );
@@ -13,7 +15,8 @@ export async function validateWord(word: string): Promise<boolean> {
         throw new Error('No se pudo validar la palabra');
     }
 
-    const data: ValidateWordResponse = await response.json();
+    const data: ValidateWordResponse =
+        await response.json();
 
     return data.exists;
 }

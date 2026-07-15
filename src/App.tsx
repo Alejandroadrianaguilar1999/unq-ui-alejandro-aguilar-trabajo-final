@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { validateWord } from './services/wordApi';
 import {
     normalizeWord,
@@ -12,16 +12,38 @@ function App() {
     const [score, setScore] = useState(0);
     const [error, setError] = useState('');
     const [isValidating, setIsValidating] = useState(false);
+    const [timeLeft, setTimeLeft] = useState(15);
+    const [gameStarted, setGameStarted] = useState(false);
+    const [gameOver, setGameOver] = useState(false);
 
     const lastWord = words.at(-1);
     const requiredLetter = lastWord?.at(-1);
+
+    useEffect(() => {
+        if (!gameStarted || gameOver) {
+            return;
+        }
+
+        if (timeLeft === 0) {
+            setGameOver(true);
+            return;
+        }
+
+        const timerId = window.setTimeout(() => {
+            setTimeLeft((currentTime) => currentTime - 1);
+        }, 1000);
+
+        return () => {
+            window.clearTimeout(timerId);
+        };
+    }, [gameStarted, gameOver, timeLeft]);
 
     const handleSubmit = async (
         event: React.FormEvent<HTMLFormElement>,
     ) => {
         event.preventDefault();
 
-        if (isValidating) {
+        if (gameOver || isValidating) {
             return;
         }
 
@@ -50,6 +72,7 @@ function App() {
                     .at(-1)
                     ?.toUpperCase()}".`,
             );
+
             return;
         }
 
@@ -73,6 +96,8 @@ function App() {
             });
 
             setCurrentWord('');
+            setGameStarted(true);
+            setTimeLeft(15);
         } catch {
             setError(
                 'No se pudo validar la palabra. Intentá nuevamente.',
@@ -106,7 +131,7 @@ function App() {
 
                     <article className="game__status-card">
                         <span>Tiempo</span>
-                        <strong>15</strong>
+                        <strong>{timeLeft}</strong>
                     </article>
                 </section>
 
@@ -124,51 +149,73 @@ function App() {
                     )}
                 </section>
 
-                <section className="game__next-word">
-                    {requiredLetter ? (
+                {!gameOver && (
+                    <section className="game__next-word">
+                        {requiredLetter ? (
+                            <p>
+                                La siguiente palabra debe comenzar con{' '}
+                                <strong>
+                                    {requiredLetter.toUpperCase()}
+                                </strong>
+                            </p>
+                        ) : (
+                            <p>Podés comenzar con cualquier palabra.</p>
+                        )}
+                    </section>
+                )}
+
+                {gameOver ? (
+                    <section className="game__over">
+                        <h2>Partida finalizada</h2>
+
                         <p>
-                            La siguiente palabra debe comenzar con{' '}
-                            <strong>{requiredLetter.toUpperCase()}</strong>
+                            Palabras válidas: <strong>{words.length}</strong>
                         </p>
-                    ) : (
-                        <p>Podés comenzar con cualquier palabra.</p>
-                    )}
-                </section>
 
-                <form
-                    className="game__form"
-                    onSubmit={handleSubmit}
-                >
-                    <label htmlFor="word">
-                        Ingresá una palabra
-                    </label>
-
-                    <div className="game__form-controls">
-                        <input
-                            id="word"
-                            type="text"
-                            value={currentWord}
-                            onChange={(event) => {
-                                setCurrentWord(event.target.value);
-                            }}
-                            placeholder="Ejemplo: casa"
-                            autoComplete="off"
-                            disabled={isValidating}
-                        />
-
-                        <button
-                            type="submit"
-                            disabled={isValidating}
+                        <p>
+                            Puntaje final: <strong>{score}</strong>
+                        </p>
+                    </section>
+                ) : (
+                    <>
+                        <form
+                            className="game__form"
+                            onSubmit={handleSubmit}
                         >
-                            {isValidating ? 'Validando...' : 'Enviar'}
-                        </button>
-                    </div>
-                </form>
+                            <label htmlFor="word">
+                                Ingresá una palabra
+                            </label>
 
-                {error && (
-                    <p className="game__error">
-                        {error}
-                    </p>
+                            <div className="game__form-controls">
+                                <input
+                                    id="word"
+                                    type="text"
+                                    value={currentWord}
+                                    onChange={(event) => {
+                                        setCurrentWord(event.target.value);
+                                    }}
+                                    placeholder="Ejemplo: casa"
+                                    autoComplete="off"
+                                    disabled={isValidating}
+                                />
+
+                                <button
+                                    type="submit"
+                                    disabled={isValidating}
+                                >
+                                    {isValidating
+                                        ? 'Validando...'
+                                        : 'Enviar'}
+                                </button>
+                            </div>
+                        </form>
+
+                        {error && (
+                            <p className="game__error">
+                                {error}
+                            </p>
+                        )}
+                    </>
                 )}
             </section>
         </main>
