@@ -1,30 +1,64 @@
 import { useState } from 'react';
+import { validateWord } from './services/wordApi';
 import './App.css';
 
 function App() {
     const [currentWord, setCurrentWord] = useState('');
     const [words, setWords] = useState<string[]>([]);
     const [score, setScore] = useState(0);
+    const [error, setError] = useState('');
+    const [isValidating, setIsValidating] = useState(false);
 
-    const handleSubmit = (
+    const handleSubmit = async (
         event: React.FormEvent<HTMLFormElement>,
     ) => {
         event.preventDefault();
 
-        const word = currentWord.trim().toLowerCase();
-
-        if (!word) {
+        if (isValidating) {
             return;
         }
 
-        setWords((currentWords) => [
-            ...currentWords,
-            word,
-        ]);
+        const word = currentWord.trim().toLocaleLowerCase('es');
 
-        setScore((currentScore) => currentScore + word.length);
+        setError('');
 
-        setCurrentWord('');
+        if (!word) {
+            setError('Ingresá una palabra.');
+            return;
+        }
+
+        if (words.includes(word)) {
+            setError('La palabra ya fue utilizada.');
+            return;
+        }
+
+        try {
+            setIsValidating(true);
+
+            const exists = await validateWord(word);
+
+            if (!exists) {
+                setError('La palabra no existe.');
+                return;
+            }
+
+            setWords((currentWords) => [
+                ...currentWords,
+                word,
+            ]);
+
+            setScore((currentScore) => {
+                return currentScore + word.length;
+            });
+
+            setCurrentWord('');
+        } catch {
+            setError(
+                'No se pudo validar la palabra. Intentá nuevamente.',
+            );
+        } finally {
+            setIsValidating(false);
+        }
     };
 
     return (
@@ -91,13 +125,23 @@ function App() {
                             }}
                             placeholder="Ejemplo: casa"
                             autoComplete="off"
+                            disabled={isValidating}
                         />
 
-                        <button type="submit">
-                            Enviar
+                        <button
+                            type="submit"
+                            disabled={isValidating}
+                        >
+                            {isValidating ? 'Validando...' : 'Enviar'}
                         </button>
                     </div>
                 </form>
+
+                {error && (
+                    <p className="game__error">
+                        {error}
+                    </p>
+                )}
             </section>
         </main>
     );
