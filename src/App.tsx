@@ -1,9 +1,23 @@
-import { useEffect, useState } from 'react';
+import {
+    useEffect,
+    useState,
+} from 'react';
+import type {
+    ChangeEvent,
+    FormEvent,
+} from 'react';
+
+import { GameHeader } from './components/GameHeader';
+import { GameOver } from './components/GameOver';
+import { GameStatus } from './components/GameStatus';
+import { WordChain } from './components/WordChain';
+import { WordForm } from './components/WordForm';
 import { validateWord } from './services/wordApi';
 import {
     normalizeWord,
     respectsChain,
 } from './utils/words';
+
 import './App.css';
 
 function App() {
@@ -15,9 +29,6 @@ function App() {
     const [timeLeft, setTimeLeft] = useState(15);
     const [gameStarted, setGameStarted] = useState(false);
     const [gameOver, setGameOver] = useState(false);
-
-    const lastWord = words.at(-1);
-    const requiredLetter = lastWord?.at(-1);
 
     useEffect(() => {
         if (!gameStarted || gameOver) {
@@ -38,8 +49,14 @@ function App() {
         };
     }, [gameStarted, gameOver, timeLeft]);
 
+    const handleWordChange = (
+        event: ChangeEvent<HTMLInputElement>,
+    ) => {
+        setCurrentWord(event.target.value);
+    };
+
     const handleSubmit = async (
-        event: React.FormEvent<HTMLFormElement>,
+        event: FormEvent<HTMLFormElement>,
     ) => {
         event.preventDefault();
 
@@ -121,118 +138,32 @@ function App() {
     return (
         <main className="game">
             <section className="game__card">
-                <header className="game__header">
-                    <p className="game__eyebrow">
-                        Trabajo Final Integrador
-                    </p>
+                <GameHeader />
 
-                    <h1>Palabras Encadenadas</h1>
+                <GameStatus
+                    score={score}
+                    timeLeft={timeLeft}
+                />
 
-                    <p className="game__description">
-                        Formá la cadena más larga posible antes de que se termine el
-                        tiempo.
-                    </p>
-                </header>
-
-                <section className="game__status">
-                    <article className="game__status-card">
-                        <span>Puntaje</span>
-                        <strong>{score}</strong>
-                    </article>
-
-                    <article className="game__status-card">
-                        <span>Tiempo</span>
-                        <strong>{timeLeft}</strong>
-                    </article>
-                </section>
-
-                <section className="game__chain">
-                    <h2>Cadena de palabras</h2>
-
-                    {words.length === 0 ? (
-                        <p className="game__empty-message">
-                            Todavía no ingresaste ninguna palabra.
-                        </p>
-                    ) : (
-                        <p className="game__words">
-                            {words.join(' → ')}
-                        </p>
-                    )}
-                </section>
-
-                {!gameOver && (
-                    <section className="game__next-word">
-                        {requiredLetter ? (
-                            <p>
-                                La siguiente palabra debe comenzar con{' '}
-                                <strong>
-                                    {requiredLetter.toUpperCase()}
-                                </strong>
-                            </p>
-                        ) : (
-                            <p>Podés comenzar con cualquier palabra.</p>
-                        )}
-                    </section>
-                )}
+                <WordChain
+                    words={words}
+                    gameOver={gameOver}
+                />
 
                 {gameOver ? (
-                    <section className="game__over">
-                        <h2>Partida finalizada</h2>
-
-                        <p>
-                            Palabras válidas: <strong>{words.length}</strong>
-                        </p>
-
-                        <p>
-                            Puntaje final: <strong>{score}</strong>
-                        </p>
-
-                        <button
-                            type="button"
-                            className="game__restart-button"
-                            onClick={restartGame}
-                        >
-                            Jugar nuevamente
-                        </button>
-                    </section>
+                    <GameOver
+                        wordCount={words.length}
+                        score={score}
+                        onRestart={restartGame}
+                    />
                 ) : (
-                    <>
-                        <form
-                            className="game__form"
-                            onSubmit={handleSubmit}
-                        >
-                            <label htmlFor="word">
-                                Ingresá una palabra
-                            </label>
-
-                            <div className="game__form-controls">
-                                <input
-                                    id="word"
-                                    type="text"
-                                    value={currentWord}
-                                    onChange={(event) => {
-                                        setCurrentWord(event.target.value);
-                                    }}
-                                    placeholder="Ejemplo: casa"
-                                    autoComplete="off"
-                                    disabled={isValidating}
-                                />
-
-                                <button
-                                    type="submit"
-                                    disabled={isValidating}
-                                >
-                                    {isValidating ? 'Validando...' : 'Enviar'}
-                                </button>
-                            </div>
-                        </form>
-
-                        {error && (
-                            <p className="game__error">
-                                {error}
-                            </p>
-                        )}
-                    </>
+                    <WordForm
+                        currentWord={currentWord}
+                        error={error}
+                        isValidating={isValidating}
+                        onChange={handleWordChange}
+                        onSubmit={handleSubmit}
+                    />
                 )}
             </section>
         </main>
