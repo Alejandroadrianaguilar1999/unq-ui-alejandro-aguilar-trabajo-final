@@ -1,32 +1,150 @@
-# React + TypeScript + Vite
+# Palabras Encadenadas
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Trabajo Final Integrador de la materia Interfaces de Usuario.
 
-Currently, two official plugins are available:
+La aplicación consiste en un juego de palabras encadenadas desarrollado con React y TypeScript. El objetivo es formar la cadena más larga posible antes de que finalice el tiempo disponible.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Reglas del juego
 
-## React Compiler
+* La primera palabra puede ser cualquier palabra válida.
+* Cada nueva palabra debe comenzar con la última letra de la palabra anterior.
+* La palabra debe existir en el diccionario español.
+* No se pueden repetir palabras durante una misma partida.
+* Cada letra suma un punto.
+* El jugador dispone de 15 segundos para ingresar una palabra válida.
+* Cuando se ingresa una palabra válida, el contador vuelve a 15 segundos.
+* Las palabras inválidas no reinician el contador.
+* La partida termina cuando el contador llega a cero.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Funcionalidades
 
-## Expanding the Oxlint configuration
+* Ingreso de palabras.
+* Validación mediante la API provista por la cátedra.
+* Validación de palabras repetidas.
+* Validación de la regla de encadenamiento.
+* Puntaje acumulado según la cantidad de letras.
+* Temporizador de 15 segundos.
+* Visualización de la cadena de palabras.
+* Pantalla de fin de partida.
+* Posibilidad de jugar varias partidas.
+* Leaderboard local con los 10 mejores puntajes.
+* Registro del nombre del jugador.
+* Diseño adaptable a dispositivos móviles.
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+## Tecnologías utilizadas
+
+* React
+* TypeScript
+* Vite
+* CSS
+* Local Storage
+
+## API utilizada
+
+La aplicación utiliza la API provista por la cátedra para verificar si una palabra existe en el diccionario español.
+
+```text
+https://word-api-hmlg.vercel.app/api/validate?word=palabra
+```
+
+Ejemplo:
+
+```text
+https://word-api-hmlg.vercel.app/api/validate?word=hola
+```
+
+Respuesta para una palabra válida:
 
 ```json
 {
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
+  "exists": true
 }
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Respuesta para una palabra inválida:
+
+```json
+{
+  "exists": false
+}
+```
+
+## Requisitos
+
+Para ejecutar el proyecto es necesario tener instalado:
+
+* Node.js
+* npm
+* Git
+
+Se recomienda utilizar una versión reciente de Node.js.
+
+## Instalación
+
+Clonar el repositorio:
+
+```bash
+git clone https://github.com/Alejandroadrianaguilar1999/unq-ui-alejandro-aguilar-trabajo-final
+```
+
+Ingresar a la carpeta del proyecto:
+
+```bash
+cd unq-ui-alejandro-aguilar-trabajo-final
+```
+
+Instalar las dependencias:
+
+```bash
+npm install
+```
+
+## Ejecución local
+
+Para iniciar el servidor de desarrollo:
+
+```bash
+npm run dev
+```
+
+Vite mostrará una dirección local similar a:
+
+```text
+http://localhost:5173
+```
+
+Abrir esa dirección en el navegador.
+
+## Compilación
+
+Para generar la versión de producción:
+
+```bash
+npm run build
+```
+
+Los archivos generados se guardarán en la carpeta:
+
+```text
+dist
+```
+
+## Vista previa de producción
+
+Para probar localmente la versión compilada:
+
+```bash
+npm run preview
+```
+
+## Persistencia de datos
+
+Los mejores puntajes se guardan en el navegador utilizando `localStorage`.
+
+Esto permite conservar el leaderboard aunque se cierre o se recargue la página.
+
+Los datos se almacenan únicamente en el dispositivo y navegador donde se ejecuta la aplicación.
+
+## Autor
+
+Alejandro Adrian Aguilar
