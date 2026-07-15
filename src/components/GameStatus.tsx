@@ -1,11 +1,15 @@
 interface GameStatusProps {
     score: number;
     timeLeft: number;
+    wordCount: number;
+    averageLength: number;
 }
 
 export function GameStatus({
                                score,
                                timeLeft,
+                               wordCount,
+                               averageLength,
                            }: GameStatusProps) {
     const isTimeRunningOut = timeLeft <= 5;
     const timerPercentage = (timeLeft / 15) * 100;
@@ -33,15 +37,15 @@ export function GameStatus({
                         : ''
                 }`}
             >
-        <span className="game__status-icon" aria-hidden="true">
-          ⏱️
-        </span>
+                <span className="game__status-icon" aria-hidden="true">
+                  ⏱️
+                </span>
 
                 <div className="game__timer-content">
                     <div className="game__timer-heading">
-            <span className="game__status-label">
-              Tiempo
-            </span>
+                        <span className="game__status-label">
+                          Tiempo
+                        </span>
 
                         <strong>{timeLeft}s</strong>
                     </div>
@@ -61,6 +65,30 @@ export function GameStatus({
                             }}
                         />
                     </div>
+                </div>
+            </article>
+
+            <article className="game__status-card">
+                <span className="game__status-icon">📚</span>
+
+                <div>
+                    <span className="game__status-label">
+                      Palabras
+                    </span>
+
+                    <strong>{wordCount}</strong>
+                </div>
+            </article>
+
+            <article className="game__status-card">
+                <span className="game__status-icon">🔤</span>
+
+                <div>
+                    <span className="game__status-label">
+                      Promedio
+                    </span>
+
+                    <strong>{averageLength}</strong>
                 </div>
             </article>
         </section>

@@ -173,6 +173,11 @@ function App() {
         scoreSavedRef.current = false;
     };
 
+    const averageLength =
+        words.length === 0
+            ? 0
+            : Number((score / words.length).toFixed(1));
+
     return (
         <main className="game">
             <div className="game__layout">
@@ -182,6 +187,8 @@ function App() {
                     <GameStatus
                         score={score}
                         timeLeft={timeLeft}
+                        wordCount={words.length}
+                        averageLength={averageLength}
                     />
 
                     <WordChain

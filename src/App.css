@@ -131,7 +131,7 @@ input {
 
 .game__status {
   display: grid;
-  grid-template-columns: 0.8fr 1.2fr;
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
   margin-top: 2rem;
 }
@@ -666,6 +666,9 @@ input {
 
   .game__word-count {
     align-self: flex-start;
+  }
+  .game__status {
+    grid-template-columns: 1fr;
   }
 }
 
