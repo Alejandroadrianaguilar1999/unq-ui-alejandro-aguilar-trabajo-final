@@ -221,3 +221,19 @@
     width: 100%;
   }
 }
+
+.game__restart-button {
+  margin-top: 1rem;
+  padding: 0.85rem 1.5rem;
+  border: 0;
+  border-radius: 0.65rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  background-color: #4f46e5;
+  cursor: pointer;
+}
+
+.game__restart-button:hover {
+  background-color: #4338ca;
+}

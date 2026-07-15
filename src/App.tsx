@@ -107,6 +107,17 @@ function App() {
         }
     };
 
+    const restartGame = () => {
+        setCurrentWord('');
+        setWords([]);
+        setScore(0);
+        setError('');
+        setIsValidating(false);
+        setTimeLeft(15);
+        setGameStarted(false);
+        setGameOver(false);
+    };
+
     return (
         <main className="game">
             <section className="game__card">
@@ -175,6 +186,14 @@ function App() {
                         <p>
                             Puntaje final: <strong>{score}</strong>
                         </p>
+
+                        <button
+                            type="button"
+                            className="game__restart-button"
+                            onClick={restartGame}
+                        >
+                            Jugar nuevamente
+                        </button>
                     </section>
                 ) : (
                     <>
@@ -203,9 +222,7 @@ function App() {
                                     type="submit"
                                     disabled={isValidating}
                                 >
-                                    {isValidating
-                                        ? 'Validando...'
-                                        : 'Enviar'}
+                                    {isValidating ? 'Validando...' : 'Enviar'}
                                 </button>
                             </div>
                         </form>
