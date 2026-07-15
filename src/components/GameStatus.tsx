@@ -17,7 +17,10 @@ export function GameStatus({
     return (
         <section className="game__status">
             <article className="game__status-card">
-        <span className="game__status-icon" aria-hidden="true">
+        <span
+            className="game__status-icon"
+            aria-hidden="true"
+        >
           ⭐
         </span>
 
@@ -37,15 +40,18 @@ export function GameStatus({
                         : ''
                 }`}
             >
-                <span className="game__status-icon" aria-hidden="true">
-                  ⏱️
-                </span>
+        <span
+            className="game__status-icon"
+            aria-hidden="true"
+        >
+          ⏱️
+        </span>
 
                 <div className="game__timer-content">
                     <div className="game__timer-heading">
-                        <span className="game__status-label">
-                          Tiempo
-                        </span>
+            <span className="game__status-label">
+              Tiempo
+            </span>
 
                         <strong>{timeLeft}s</strong>
                     </div>
@@ -69,24 +75,34 @@ export function GameStatus({
             </article>
 
             <article className="game__status-card">
-                <span className="game__status-icon">📚</span>
+        <span
+            className="game__status-icon"
+            aria-hidden="true"
+        >
+          📚
+        </span>
 
                 <div>
-                    <span className="game__status-label">
-                      Palabras
-                    </span>
+          <span className="game__status-label">
+            Palabras
+          </span>
 
                     <strong>{wordCount}</strong>
                 </div>
             </article>
 
             <article className="game__status-card">
-                <span className="game__status-icon">🔤</span>
+        <span
+            className="game__status-icon"
+            aria-hidden="true"
+        >
+          🔤
+        </span>
 
                 <div>
-                    <span className="game__status-label">
-                      Promedio
-                    </span>
+          <span className="game__status-label">
+            Promedio
+          </span>
 
                     <strong>{averageLength}</strong>
                 </div>

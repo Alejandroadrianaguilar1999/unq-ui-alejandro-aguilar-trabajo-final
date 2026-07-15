@@ -68,7 +68,6 @@ input {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 780px;
   padding: 2rem;
   border: 1px solid rgba(148, 163, 184, 0.2);
   border-radius: 1.75rem;
@@ -636,16 +635,7 @@ input {
   }
 
   .game__card {
-    position: relative;
-    width: 100%;
-    padding: 2rem;
-    border: 1px solid rgba(148, 163, 184, 0.2);
-    border-radius: 1.75rem;
-    background-color: rgba(15, 23, 42, 0.88);
-    box-shadow:
-            0 30px 80px rgba(0, 0, 0, 0.45),
-            inset 0 1px 0 rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(18px);
+    padding: 1.25rem;
   }
 
   .game__status {

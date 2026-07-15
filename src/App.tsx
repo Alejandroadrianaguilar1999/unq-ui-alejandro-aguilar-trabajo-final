@@ -69,7 +69,13 @@ function App() {
         return () => {
             window.clearTimeout(timerId);
         };
-    }, [gameStarted, gameOver, timeLeft, score]);
+    }, [
+        gameStarted,
+        gameOver,
+        timeLeft,
+        score,
+        playerName,
+    ]);
 
     const handleWordChange: ChangeEventHandler<HTMLInputElement> = (
         event,
