@@ -1,8 +1,10 @@
 # Palabras Encadenadas
 
-Trabajo Final Integrador de la materia Interfaces de Usuario.
+Trabajo Final Integrador de la materia **Interfaces de Usuario**.
 
-La aplicación consiste en un juego de palabras encadenadas desarrollado con React y TypeScript. El objetivo es formar la cadena más larga posible antes de que finalice el tiempo disponible.
+La aplicación consiste en un juego de palabras encadenadas desarrollado con **React** y **TypeScript**. El objetivo es formar la cadena más larga posible antes de que finalice el tiempo disponible.
+
+---
 
 ## Reglas del juego
 
@@ -10,26 +12,30 @@ La aplicación consiste en un juego de palabras encadenadas desarrollado con Rea
 * Cada nueva palabra debe comenzar con la última letra de la palabra anterior.
 * La palabra debe existir en el diccionario español.
 * No se pueden repetir palabras durante una misma partida.
-* Cada letra suma un punto.
-* El jugador dispone de 15 segundos para ingresar una palabra válida.
-* Cuando se ingresa una palabra válida, el contador vuelve a 15 segundos.
-* Las palabras inválidas no reinician el contador.
-* La partida termina cuando el contador llega a cero.
+* Cada letra suma **1 punto**.
+* El jugador dispone de **15 segundos** para ingresar una palabra válida.
+* Cuando se ingresa una palabra válida, el contador vuelve a **15 segundos**.
+* Las palabras inválidas **no reinician** el contador.
+* La partida termina cuando el tiempo llega a **0**.
+
+---
 
 ## Funcionalidades
 
-* Ingreso de palabras.
-* Validación mediante la API provista por la cátedra.
+* Ingreso del nombre del jugador.
+* Ingreso y validación de palabras mediante la API provista por la cátedra.
 * Validación de palabras repetidas.
 * Validación de la regla de encadenamiento.
 * Puntaje acumulado según la cantidad de letras.
 * Temporizador de 15 segundos.
 * Visualización de la cadena de palabras.
+* Estadísticas de la partida.
 * Pantalla de fin de partida.
-* Posibilidad de jugar varias partidas.
+* Posibilidad de jugar múltiples partidas.
 * Leaderboard local con los 10 mejores puntajes.
-* Registro del nombre del jugador.
-* Diseño adaptable a dispositivos móviles.
+* Diseño responsive.
+
+---
 
 ## Tecnologías utilizadas
 
@@ -39,9 +45,13 @@ La aplicación consiste en un juego de palabras encadenadas desarrollado con Rea
 * CSS
 * Local Storage
 
+---
+
 ## API utilizada
 
 La aplicación utiliza la API provista por la cátedra para verificar si una palabra existe en el diccionario español.
+
+Endpoint:
 
 ```text
 https://word-api-hmlg.vercel.app/api/validate?word=palabra
@@ -69,6 +79,8 @@ Respuesta para una palabra inválida:
 }
 ```
 
+---
+
 ## Requisitos
 
 Para ejecutar el proyecto es necesario tener instalado:
@@ -79,12 +91,14 @@ Para ejecutar el proyecto es necesario tener instalado:
 
 Se recomienda utilizar una versión reciente de Node.js.
 
+---
+
 ## Instalación
 
 Clonar el repositorio:
 
 ```bash
-git clone https://github.com/Alejandroadrianaguilar1999/unq-ui-alejandro-aguilar-trabajo-final
+git clone https://github.com/Alejandroadrianaguilar1999/unq-ui-alejandro-aguilar-trabajo-final.git
 ```
 
 Ingresar a la carpeta del proyecto:
@@ -99,52 +113,63 @@ Instalar las dependencias:
 npm install
 ```
 
+---
+
 ## Ejecución local
 
-Para iniciar el servidor de desarrollo:
+Iniciar el servidor de desarrollo:
 
 ```bash
 npm run dev
 ```
 
-Vite mostrará una dirección local similar a:
+Luego abrir en el navegador la dirección mostrada por Vite, por ejemplo:
 
 ```text
 http://localhost:5173
 ```
 
-Abrir esa dirección en el navegador.
+---
 
 ## Compilación
 
-Para generar la versión de producción:
+Generar la versión de producción:
 
 ```bash
 npm run build
 ```
 
-Los archivos generados se guardarán en la carpeta:
+Los archivos compilados se generan en la carpeta:
 
 ```text
 dist
 ```
 
+---
+
 ## Vista previa de producción
 
-Para probar localmente la versión compilada:
+Para ejecutar la versión compilada localmente:
 
 ```bash
 npm run preview
 ```
 
+---
+
 ## Persistencia de datos
 
-Los mejores puntajes se guardan en el navegador utilizando `localStorage`.
+Los mejores puntajes se almacenan utilizando **Local Storage**.
 
-Esto permite conservar el leaderboard aunque se cierre o se recargue la página.
+Cada registro guarda:
 
-Los datos se almacenan únicamente en el dispositivo y navegador donde se ejecuta la aplicación.
+* Nombre del jugador.
+* Puntaje obtenido.
+
+La información permanece disponible aunque se cierre o recargue el navegador.
+
+---
 
 ## Autor
 
-Alejandro Adrian Aguilar
+**Alejandro Adrian Aguilar**
