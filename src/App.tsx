@@ -4,6 +4,7 @@ import './App.css';
 function App() {
     const [currentWord, setCurrentWord] = useState('');
     const [words, setWords] = useState<string[]>([]);
+    const [score, setScore] = useState(0);
 
     const handleSubmit = (
         event: React.FormEvent<HTMLFormElement>,
@@ -20,6 +21,8 @@ function App() {
             ...currentWords,
             word,
         ]);
+
+        setScore((currentScore) => currentScore + word.length);
 
         setCurrentWord('');
     };
@@ -43,7 +46,7 @@ function App() {
                 <section className="game__status">
                     <article className="game__status-card">
                         <span>Puntaje</span>
-                        <strong>0</strong>
+                        <strong>{score}</strong>
                     </article>
 
                     <article className="game__status-card">
